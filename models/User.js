@@ -1,5 +1,5 @@
 var crypto = require('crypto');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt-nodejs');
 var bookshelf = require('../config/bookshelf');
 
 var User = bookshelf.Model.extend({
@@ -12,6 +12,7 @@ var User = bookshelf.Model.extend({
 
   hashPassword: function(model, attrs, options) {
     var password = options.patch ? attrs.password : model.get('password');
+
     if (!password) { return; }
     return new Promise(function(resolve, reject) {
       bcrypt.genSalt(10, function(err, salt) {
