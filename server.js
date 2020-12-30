@@ -15,7 +15,7 @@ var cors = require('cors');
 dotenv.config();
 
 // Models
-// var User = require('./models/User');
+var User = require('./models/User');
 var app = express();
 
 // Controllers
@@ -38,36 +38,36 @@ app.use(compression());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(expressValidator());
+app.use(expressValidator());
 app.use(cookieParser());
 app.use(cors());
 app.use(favicon(path.join(__dirname, 'public','/img/favicon.png')));
 
-// app.use(function(req, res, next) {
-//   req.isAuthenticated = function() {
-//     var token = (req.headers.authorization && req.headers.authorization.split(' ')[1]) || req.cookies.token;
-//     try {
-//       return jwt.verify(token, process.env.TOKEN_SECRET);
-//     } catch (err) {
-//       return false;
-//     }
-//   };
+app.use(function(req, res, next) {
+  req.isAuthenticated = function() {
+    var token = (req.headers.authorization && req.headers.authorization.split(' ')[1]) || req.cookies.token;
+    try {
+      return jwt.verify(token, process.env.TOKEN_SECRET);
+    } catch (err) {
+      return false;
+    }
+  };
 
-//   if (req.isAuthenticated()) {
-//     var payload = req.isAuthenticated();
-//     new User({ id: payload.sub })
-//       .fetch()
-//       .then(function(user) {
-//         req.user = user;
-//         next();
-//       });
-//   } else {
-//     next();
-//   }
-// });
+  if (req.isAuthenticated()) {
+    var payload = req.isAuthenticated();
+    new User({ id: payload.sub })
+      .fetch()
+      .then(function(user) {
+        req.user = user;
+        next();
+      });
+  } else {
+    next();
+  }
+});
 
-// app.post('/signup', userController.signupPost);
-// app.post('/login', userController.loginPost);
+app.post('/signup', userController.signupPost);
+app.post('/login', userController.loginPost);
 // app.post('/forgot', userController.forgotPost);
 // app.post('/reset-password=:token', userController.resetPassword);
 // app.get('/unlink/:provider', userController.ensureAuthenticated, userController.unlink);
@@ -82,7 +82,7 @@ app.use(favicon(path.join(__dirname, 'public','/img/favicon.png')));
 // app.delete('/account', userController.ensureAuthenticated, userController.accountDelete);
 
 // // Main
-// app.get('/main-by-year/:year', mainController.getTransactionsAndPurchasesByYear);
+app.get('/main-by-year/id=:id&year=:year', mainController.getTransactionsAndPurchasesByYear);
 
 // // Banks
 // app.get('/get-all-banks/page=:page&pageSize=:pageSize', bankController.getAllBanks);
