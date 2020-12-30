@@ -1,16 +1,18 @@
-const Purchase = require('../models/Purchase');
-const Transaction = require('../models/Transaction');
-const Bank = require('../models/Bank');
-const Timesheet = require('../models/Timesheet');
-const async = require('async');
+var Purchase = require('../models/Purchase');
+var Transaction = require('../models/Transaction');
+var Bank = require('../models/Bank');
+var Timesheet = require('../models/Timesheet');
+var async = require('async');
 /**
- * GET /main-by-year/:year
+ * GET /main-by-year/:id&:year
  */
 exports.getTransactionsAndPurchasesByYear = function(req, res) {
-  let year = req.params.year;
-  let startDate = `${year}-01-01`;
-  let endDate = `${year}-12-31`;
-  let user = req.user.id;
+
+  var year = req.params.year;
+  var user = req.params.id;
+
+  var startDate = `${year}-01-01`;
+  var endDate = `${year}-12-31`;
 
   async.parallel([
     function(callback) {
