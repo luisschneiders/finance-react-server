@@ -1,22 +1,19 @@
-const moment = require('moment');
-const async = require('async');
-const Bank = require('../models/Bank');
-const Purchase = require('../models/Purchase');
-const Transaction = require('../models/Transaction');
+var moment = require('moment');
+var async = require('async');
+var Bank = require('../models/Bank');
+var Purchase = require('../models/Purchase');
+var Transaction = require('../models/Transaction');
 
 /**
- * GET /purchases-by-custom-search/:from&:to&:expenseType
+ * GET /purchases-by-custom-search/:id&:from&:to&:expenseType
  */
 exports.getPurchasesByCustomSearch = function(req, res) {
-  let startDate = null;
-  let endDate = null;
-  let expenseType = null;
+  var id = req.params.id;
+  var startDate = req.params.from;
+  var endDate = req.params.to;
+  var expenseType = req.params.expenseType;
 
-  startDate = req.params.from;
-  endDate = req.params.to;
-  expenseType = req.params.expenseType;
-
-  Purchase.getPurchaseByCustomSearch(req.user.id, startDate, endDate, expenseType)
+  Purchase.getPurchaseByCustomSearch(id, startDate, endDate, expenseType)
     .then(function(purchases) {
       res.json(purchases);
     }).catch(function(err) {
@@ -28,7 +25,7 @@ exports.getPurchasesByCustomSearch = function(req, res) {
  * POST /purchases/new
  */
 exports.savePurchase = function(req, res) {
-  let errors = null;
+  var errors = null;
 
   req.body.purchaseAmount = parseFloat(req.body.purchaseAmount);
   req.assert('purchaseBank', 'Bank cannot be blank').notEmpty();
@@ -48,7 +45,7 @@ exports.savePurchase = function(req, res) {
     return new Promise(function(resolve, reject) {
       Bank.getById(req.user.id, req.body.purchaseBank)
         .then(function() {
-          let bank = new Bank();
+          var bank = new Bank();
           // check if there is enough funds
           if (parseFloat(this.attributes.bankCurrentBalance) < parseFloat(req.body.purchaseAmount)) {
             reject({msg: 'Insufficient funds!'});
@@ -72,7 +69,7 @@ exports.savePurchase = function(req, res) {
 
   function saveTransaction() {
     return new Promise(function(resolve, reject) {
-      let transaction = new Transaction();
+      var transaction = new Transaction();
       transaction.save({
         transactionLink: null,
         transactionDate: req.body.purchaseDate,
@@ -96,7 +93,7 @@ exports.savePurchase = function(req, res) {
 
   function savePurchase(transactionID) {
     return new Promise(function(resolve, reject) {
-      let purchase =  new Purchase();
+      var purchase =  new Purchase();
       purchase.save({
         purchaseDate: req.body.purchaseDate,
         purchaseBank: req.body.purchaseBank,
@@ -119,7 +116,7 @@ exports.savePurchase = function(req, res) {
   };
 
   async function transaction() {
-    let transactionID = 0;
+    var transactionID = 0;
     try {
       await updateBankBalance();
       transactionID = await saveTransaction();
