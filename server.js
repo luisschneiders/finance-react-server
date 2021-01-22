@@ -119,7 +119,7 @@ app.get('/main-by-year/id=:id&year=:year', mainController.getTransactionsAndPurc
 // app.post('/transactions/new', userController.ensureAuthenticated, transactionController.saveTransaction);
 
 // // Purchase
-// app.get('/purchases-by-custom-search/:from&:to&:expenseType', purchaseController.getPurchasesByCustomSearch);
+app.get('/purchases-by-custom-search/id=:id&from=:from&to=:to&expenseType=:expenseType', purchaseController.getPurchasesByCustomSearch);
 // app.post('/purchases/new', userController.ensureAuthenticated, purchaseController.savePurchase);
 
 // // Timesheet
