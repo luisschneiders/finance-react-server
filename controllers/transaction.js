@@ -1,15 +1,15 @@
-const moment = require('moment');
-const Transaction = require('../models/Transaction');
-const Bank = require('../models/Bank');
+var moment = require('moment');
+var Transaction = require('../models/Transaction');
+var Bank = require('../models/Bank');
 
 /**
  * GET /get-all-transactions-month/:year-month
  */
 exports.getAllTransactions = function(req, res) {
-  let user = req.user.id;
-  let period = req.params.period;
-  let startDate = moment(period).startOf('month').format('YYYY-MM-DD');
-  let endDate = moment(period).endOf('month').format('YYYY-MM-DD');
+  var user = req.user.id;
+  var period = req.params.period;
+  var startDate = moment(period).startOf('month').format('YYYY-MM-DD');
+  var endDate = moment(period).endOf('month').format('YYYY-MM-DD');
 
   Transaction.getAllTransactions(user, startDate, endDate)
     .then(function(transactions) {
@@ -20,18 +20,15 @@ exports.getAllTransactions = function(req, res) {
 };
 
 /**
- * GET /transactions-by-custom-search/:from&:to&:transactionType
+ * GET /transactions-by-custom-search/:id&:from&:to&:transactionType
  */
 exports.getTransactionByCustomSearch = function(req, res) {
-  let startDate = null;
-  let endDate = null;
-  let transactionType = null;
+  var id = req.params.id;
+  var startDate = req.params.from;
+  var endDate = req.params.to;
+  var transactionType = req.params.transactionType;
 
-  startDate = req.params.from;
-  endDate = req.params.to;
-  transactionType = req.params.transactionType;
-
-  Transaction.getTransactionByCustomSearch(req.user.id, startDate, endDate, transactionType)
+  Transaction.getTransactionByCustomSearch(id, startDate, endDate, transactionType)
     .then(function(transactions) {
       res.json(transactions);
     }).catch(function(err) {
@@ -43,7 +40,7 @@ exports.getTransactionByCustomSearch = function(req, res) {
  * POST /transactions/new
  */
 exports.saveTransaction = function(req, res) {
-  let errors = null;
+  var errors = null;
 
   req.body.transactionAmount = parseFloat(req.body.transactionAmount);
   req.assert('transactionDate', 'Date cannot be blank').notEmpty();
@@ -80,12 +77,12 @@ exports.saveTransaction = function(req, res) {
   }
 
   function updateBank(action) {
-    let bankId = checkBankId(action);
+    var bankId = checkBankId(action);
 
     return new Promise(function(resolve, reject) {
       Bank.getById(req.user.id, bankId)
         .then(function() {
-          let bank = new Bank();
+          var bank = new Bank();
           if (action == 'D') {
             if (parseFloat(this.attributes.bankCurrentBalance) < parseFloat(req.body.transactionAmount)) {
               reject({msg: 'Insufficient funds!'});
@@ -108,10 +105,10 @@ exports.saveTransaction = function(req, res) {
   };
 
   function saveTransaction(action, transactionLink) {
-    let bankId = checkBankId(action);
+    var bankId = checkBankId(action);
 
     return new Promise(function(resolve, reject) {
-      let transaction = new Transaction();
+      var transaction = new Transaction();
       transaction.save({
         transactionLink: transactionLink,
         transactionDate: req.body.transactionDate,
@@ -158,7 +155,7 @@ exports.saveTransaction = function(req, res) {
   };
 
   async function transfer() {
-    let transactionID = 0;
+    var transactionID = 0;
     try {
       await updateBank('D');
       transactionID = await saveTransaction('D', null);
