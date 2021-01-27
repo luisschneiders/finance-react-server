@@ -115,7 +115,7 @@ app.get('/main-by-year/id=:id&year=:year', mainController.getTransactionsAndPurc
 
 // // Transaction
 // app.get('/get-all-transactions-month/:period', transactionController.getAllTransactions);
-// app.get('/transactions-by-custom-search/:from&:to&:transactionType', transactionController.getTransactionByCustomSearch);
+app.get('/transactions-by-custom-search/id=:id&from=:from&to=:to&transactionType=:transactionType', transactionController.getTransactionByCustomSearch);
 // app.post('/transactions/new', userController.ensureAuthenticated, transactionController.saveTransaction);
 
 // // Purchase
