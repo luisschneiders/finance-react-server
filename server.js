@@ -92,11 +92,11 @@ app.get('/main-by-year/id=:id&year=:year', mainController.getTransactionsAndPurc
 // app.post('/bank-new', userController.ensureAuthenticated, bankController.saveBank);
 
 // // Expense Type
-// app.get('/get-all-expenses-type/page=:page&pageSize=:pageSize', expenseTypeController.getAllExpensesType);
+app.get('/get-all-expenses-type/id=:id&page=:page&pageSize=:pageSize', expenseTypeController.getAllExpensesType);
 // app.get('/get-active-expenses-type', expenseTypeController.getActiveExpensesType);
 // app.get('/expense-type-id=:id', expenseTypeController.getExpenseTypeById);
-// app.put('/expense-type-id=:id', userController.ensureAuthenticated, expenseTypeController.saveExpenseType);
-// app.post('/expense-type-new', userController.ensureAuthenticated, expenseTypeController.saveExpenseType);
+app.put('/expense-type-id/expenseTypeInsertedBy=:expenseTypeInsertedBy&id=:id', expenseTypeController.saveExpenseType);
+app.post('/expense-type-new/expenseTypeInsertedBy=:expenseTypeInsertedBy', expenseTypeController.saveExpenseType);
 
 // // Transaction Type
 // app.get('/get-all-transactions-type/page=:page&pageSize=:pageSize', transactionTypeController.getAllTransactionsType);

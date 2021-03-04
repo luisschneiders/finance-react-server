@@ -5,7 +5,7 @@ const ExpenseType = bookshelf.Model.extend({
     hasTimestamps: true,
   },{
     getAllExpensesType: function(user, params) {
-      return this.where('expenseTypeInsertedBy', user).fetchPage({
+      return this.where('expenseTypeInsertedBy', user).orderBy('id', 'DESC').fetchPage({
         page: params.page <= 0 ? params.page = 1 : params.page,
         pageSize: params.pageSize <= 0 ? params.pageSize = 12 : params.pageSize
       });

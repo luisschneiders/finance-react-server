@@ -1,14 +1,15 @@
-const ExpenseType = require('../models/Expense-Type');
+var ExpenseType = require('../models/Expense-Type');
 
 /**
  * GET /get-expenses-type/page=:page&pageSize=:pageSize
  */
 exports.getAllExpensesType = function(req, res) {
-  let params = {
+  var id = req.params.id;
+  var params = {
     page: req.params.page,
     pageSize: req.params.pageSize
   };
-  ExpenseType.getAllExpensesType(req.user.id, params)
+  ExpenseType.getAllExpensesType(id, params)
   .then(function(expensesType) {
     res.send(JSON.stringify({ expensesType, pagination: expensesType.pagination }));
   }).catch(function(err) {
@@ -41,14 +42,15 @@ exports.getExpenseTypeById = function(req, res) {
 };
 
 /**
- * SAVE /expenses-type-new
+ * SAVE /expenses-type-new/:id
  * or
  * SAVE /expenses-type-id=:id
  */
 exports.saveExpenseType = function(req, res) {
-  let expenseType = null;
-  let errors = null;
-  let checkRecord = 0;
+  var expenseType = null;
+  var errors = null;
+  var checkRecord = 0;
+  var expenseTypeInsertedBy = req.params.expenseTypeInsertedBy;
 
   req.assert('expenseTypeDescription', 'Description cannot be blank').notEmpty();
   errors = req.validationErrors();
@@ -56,16 +58,15 @@ exports.saveExpenseType = function(req, res) {
   if (errors) {
     return res.status(400).send(errors);
   }
-
   checkRecord = new ExpenseType({id: req.params.id});
   expenseType = new ExpenseType();
 
   if(!checkRecord.isNew()) {
     expenseType.save({
         id: req.params.id,
-        expenseTypeInsertedBy: req.user.id,
+        expenseTypeInsertedBy: expenseTypeInsertedBy,
         expenseTypeDescription: req.body.expenseTypeDescription,
-        expenseTypeIsActive: req.body.expenseTypeIsActive,
+        expenseTypeIsActive: req.body.expenseTypeIsActive ? 1 : 0,
       }, { patch: true })
       .then(function(model) {
         res.send({ expenseType: model, msg: 'Expense type has been updated.' });
@@ -76,9 +77,9 @@ exports.saveExpenseType = function(req, res) {
     return;
   }
   expenseType.save({
-      expenseTypeInsertedBy: req.user.id,
+      expenseTypeInsertedBy: expenseTypeInsertedBy,
       expenseTypeDescription: req.body.expenseTypeDescription,
-      expenseTypeIsActive: req.body.expenseTypeIsActive,
+      expenseTypeIsActive: req.body.expenseTypeIsActive ? 1 : 0,
     })
     .then(function(model) {
       res.send({ expenseType: model, msg: 'Expense type has been added.' });
