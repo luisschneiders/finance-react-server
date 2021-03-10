@@ -33,12 +33,15 @@ exports.getActiveExpensesType = function(req, res) {
  * GET /expenses-type=:id
  */
 exports.getExpenseTypeById = function(req, res) {
-  ExpenseType.getById(req.user.id, req.params.id)
-  .then(function(expenseType) {
-    res.json(expenseType);
-  }).catch(function(err) {
-    console.error(err);
-  });
+  var userId = req.params.expenseTypeInsertedBy;
+  var expenseTypeId = req.params.id;
+
+  ExpenseType.getById(userId, expenseTypeId)
+    .then(function(expenseType) {
+      res.json(expenseType);
+    }).catch(function(err) {
+      console.error(err);
+    });
 };
 
 /**
@@ -69,7 +72,7 @@ exports.saveExpenseType = function(req, res) {
         expenseTypeIsActive: req.body.expenseTypeIsActive ? 1 : 0,
       }, { patch: true })
       .then(function(model) {
-        res.send({ expenseType: model, msg: 'Expense type has been updated.' });
+        res.send({ expenseType: model, msg: 'Expense category has been updated.' });
       })
       .catch(function(err) {
         res.send({ msg: err });
@@ -82,7 +85,7 @@ exports.saveExpenseType = function(req, res) {
       expenseTypeIsActive: req.body.expenseTypeIsActive ? 1 : 0,
     })
     .then(function(model) {
-      res.send({ expenseType: model, msg: 'Expense type has been added.' });
+      res.send({ expenseType: model, msg: 'Expense category has been added.' });
     })
     .catch(function(err) {
       return res.status(400).send({ msg: err });

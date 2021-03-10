@@ -94,7 +94,7 @@ app.get('/main-by-year/id=:id&year=:year', mainController.getTransactionsAndPurc
 // // Expense Type
 app.get('/get-all-expenses-type/id=:id&page=:page&pageSize=:pageSize', expenseTypeController.getAllExpensesType);
 // app.get('/get-active-expenses-type', expenseTypeController.getActiveExpensesType);
-// app.get('/expense-type-id=:id', expenseTypeController.getExpenseTypeById);
+app.get('/expense-type-id/expenseTypeInsertedBy=:expenseTypeInsertedBy&id=:id', expenseTypeController.getExpenseTypeById);
 app.put('/expense-type-id/expenseTypeInsertedBy=:expenseTypeInsertedBy&id=:id', expenseTypeController.saveExpenseType);
 app.post('/expense-type-new/expenseTypeInsertedBy=:expenseTypeInsertedBy', expenseTypeController.saveExpenseType);
 
