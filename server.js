@@ -142,11 +142,11 @@ app.get('/purchases-by-custom-search/id=:id&from=:from&to=:to&expenseType=:expen
 // app.put('/trips/remove-trip=:id', userController.ensureAuthenticated, tripController.removeTrip);
 
 // // Vehicle
-// app.get('/get-all-vehicles/page=:page&pageSize=:pageSize', vehicleController.getAllVehicles);
+app.get('/get-all-vehicles/id=:id&page=:page&pageSize=:pageSize', vehicleController.getAllVehicles);
 // app.get('/get-active-vehicles', vehicleController.getActiveVehicles);
-// app.get('/vehicle-id=:id', vehicleController.getVehicleById);
-// app.put('/vehicle-id=:id', userController.ensureAuthenticated, vehicleController.saveVehicle);
-// app.post('/vehicle-new', userController.ensureAuthenticated, vehicleController.saveVehicle);
+app.get('/vehicle-id/vehicleInsertedBy=:vehicleInsertedBy&id=:id', vehicleController.getVehicleById);
+app.put('/vehicle-id/vehicleInsertedBy=:vehicleInsertedBy&id=:id', vehicleController.saveVehicle);
+app.post('/vehicle-new/vehicleInsertedBy=:vehicleInsertedBy', vehicleController.saveVehicle);
 
 // app.get('/', function(req, res) {
 //   res.sendFile(path.join(__dirname, 'app', 'index.html'));

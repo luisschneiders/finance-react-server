@@ -1,14 +1,15 @@
-const Vehicle = require('../models/Vehicle');
+var Vehicle = require('../models/Vehicle');
 
 /**
  * GET /get-all-vehicles/page=:page&pageSize=:pageSize
  */
 exports.getAllVehicles = function(req, res) {
-  let params = {
+  var id = req.params.id;
+  var params = {
     page: req.params.page,
     pageSize: req.params.pageSize
   };
-  Vehicle.getAllVehicles(req.user.id, params)
+  Vehicle.getAllVehicles(id, params)
     .then(function(vehicles) {
       res.send(JSON.stringify({ vehicles, pagination: vehicles.pagination }));
     }).catch(function(err) {
@@ -32,7 +33,10 @@ exports.getActiveVehicles = function(req, res) {
  * GET /vehicle-id=:id
  */
 exports.getVehicleById = function(req, res) {
-  Vehicle.getById(req.user.id, req.params.id)
+  var userId = req.params.vehicleInsertedBy;
+  var vehicleId = req.params.id;
+
+  Vehicle.getById(userId, vehicleId)
     .then(function(vehicle) {
       res.json(vehicle);
     }).catch(function(err) {
@@ -46,9 +50,10 @@ exports.getVehicleById = function(req, res) {
  * SAVE /vehicle-id=:id
  */
 exports.saveVehicle = function(req, res) {
-  let vehicle = null;
-  let errors = null;
-  let checkRecord = 0;
+  var vehicle = null;
+  var errors = null;
+  var checkRecord = 0;
+  var vehicleInsertedBy = req.params.vehicleInsertedBy;
 
   req.assert('vehicleDescription', 'Description cannot be blank').notEmpty();
   req.assert('vehiclePlate', 'Plate cannot be blank').notEmpty();
@@ -65,7 +70,7 @@ exports.saveVehicle = function(req, res) {
   if(!checkRecord.isNew()) {
     vehicle.save({
         id: req.params.id,
-        vehicleInsertedBy: req.user.id,
+        vehicleInsertedBy: vehicleInsertedBy,
         vehicleDescription: req.body.vehicleDescription,
         vehiclePlate: req.body.vehiclePlate,
         vehicleIsActive: req.body.vehicleIsActive,
@@ -79,7 +84,7 @@ exports.saveVehicle = function(req, res) {
     return;
   }
   vehicle.save({
-    vehicleInsertedBy: req.user.id,
+    vehicleInsertedBy: vehicleInsertedBy,
     vehicleDescription: req.body.vehicleDescription,
     vehiclePlate: req.body.vehiclePlate,
     vehicleIsActive: req.body.vehicleIsActive,
