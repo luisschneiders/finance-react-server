@@ -66,6 +66,14 @@ app.use(function(req, res, next) {
   }
 });
 
+/**
+ * Implement for all PUT and POST
+ * userController.ensureAuthenticated with sattelizer package
+ * 
+ * E.g.
+ * app.post('/transaction-type-new/transactionTypeInsertedBy=:transactionTypeInsertedBy', userController.ensureAuthenticated, transactionTypeController.saveTransactionType);
+ */
+
 app.post('/signup', userController.signupPost);
 app.post('/login', userController.loginPost);
 // app.post('/forgot', userController.forgotPost);
@@ -99,11 +107,11 @@ app.put('/expense-type-id/expenseTypeInsertedBy=:expenseTypeInsertedBy&id=:id', 
 app.post('/expense-type-new/expenseTypeInsertedBy=:expenseTypeInsertedBy', expenseTypeController.saveExpenseType);
 
 // // Transaction Type
-// app.get('/get-all-transactions-type/page=:page&pageSize=:pageSize', transactionTypeController.getAllTransactionsType);
+app.get('/get-all-transactions-type/id=:id&page=:page&pageSize=:pageSize', transactionTypeController.getAllTransactionsType);
 // app.get('/get-active-transactions-type', transactionTypeController.getActiveTransactionsType);
-// app.get('/transaction-type-id=:id', transactionTypeController.getTransactionTypeById);
-// app.put('/transaction-type-id=:id', userController.ensureAuthenticated, transactionTypeController.saveTransactionType);
-// app.post('/transaction-type-new', userController.ensureAuthenticated, transactionTypeController.saveTransactionType);
+app.get('/transaction-type-id/transactionTypeInsertedBy=:transactionTypeInsertedBy&id=:id', transactionTypeController.getTransactionTypeById);
+app.put('/transaction-type-id/transactionTypeInsertedBy=:transactionTypeInsertedBy&id=:id', transactionTypeController.saveTransactionType);
+app.post('/transaction-type-new/transactionTypeInsertedBy=:transactionTypeInsertedBy', transactionTypeController.saveTransactionType);
 
 // // People
 // app.get('/get-all-people/page=:page&pageSize=:pageSize', peopleController.getAllPeople);
