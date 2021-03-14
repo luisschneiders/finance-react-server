@@ -53,7 +53,8 @@ exports.loginPost = function(req, res, next) {
           if (!isMatch) {
             return res.status(401).send({ error: 'Invalid email or password' });
           }
-          res.send(user.toJSON());
+          res.send({ token: generateToken(user), user: user.toJSON() });
+          // res.send(user.toJSON());
         });
       })
       .catch(function(err) {
@@ -82,7 +83,8 @@ exports.signupPost = function(req, res, next) {
 
   user.save()
     .then(function(user) {
-        return res.send(user.toJSON());
+        // return res.send(user.toJSON());
+        return res.send({ token: generateToken(user), user: user });
     })
     .catch(function(err) {
       if (err.code === 'ER_DUP_ENTRY' || err.code === '23505') {
