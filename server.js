@@ -93,11 +93,11 @@ app.post('/login', userController.loginPost);
 app.get('/main-by-year/id=:id&year=:year', mainController.getTransactionsAndPurchasesByYear);
 
 // // Banks
-// app.get('/get-all-banks/page=:page&pageSize=:pageSize', bankController.getAllBanks);
+app.get('/get-all-banks/id=:id&page=:page&pageSize=:pageSize', bankController.getAllBanks);
 // app.get('/get-active-banks', bankController.getActiveBanks);
-// app.get('/bank-id=:id', bankController.getBankById);
-// app.put('/bank-id=:id', userController.ensureAuthenticated, bankController.saveBank);
-// app.post('/bank-new', userController.ensureAuthenticated, bankController.saveBank);
+app.get('/bank-id/bankInsertedBy=:bankInsertedBy&id=:id', bankController.getBankById);
+app.put('/bank-id/bankInsertedBy=:bankInsertedBy&id=:id', bankController.saveBank);
+app.post('/bank-new/bankInsertedBy=:bankInsertedBy', bankController.saveBank);
 
 // // Expense Type
 app.get('/get-all-expenses-type/id=:id&page=:page&pageSize=:pageSize', expenseTypeController.getAllExpensesType);

@@ -1,14 +1,15 @@
-const Bank = require('../models/Bank');
+var Bank = require('../models/Bank');
 
 /**
  * GET /get-all-banks/page=:page&pageSize=:pageSize
  */
 exports.getAllBanks = function(req, res) {
-  let params = {
+  var id = req.params.id;
+  var params = {
     page: req.params.page,
     pageSize: req.params.pageSize
   };
-  Bank.getAllBanks(req.user.id, params)
+  Bank.getAllBanks(id, params)
     .then(function(banks) {
       res.send(JSON.stringify({ banks, pagination: banks.pagination }));
     }).catch(function(err) {
@@ -32,7 +33,10 @@ exports.getActiveBanks = function(req, res) {
  * GET /bank-id=:id
  */
 exports.getBankById = function(req, res) {
-  Bank.getById(req.user.id, req.params.id)
+  var userId = req.params.bankInsertedBy;
+  var bankId = req.params.id;
+
+  Bank.getById(userId, bankId)
     .then(function(bank) {
       res.json(bank);
     }).catch(function(err) {
@@ -46,9 +50,10 @@ exports.getBankById = function(req, res) {
  * SAVE /bank-id=:id
  */
 exports.saveBank = function(req, res) {
-  let bank = null;
-  let errors = null;
-  let checkRecord = 0;
+  var bank = null;
+  var errors = null;
+  var checkRecord = 0;
+  var bankInsertedBy = req.params.bankInsertedBy;
 
   req.assert('bankDescription', 'Description cannot be blank').notEmpty();
   req.assert('bankAccount', 'Account cannot be blank').notEmpty();
@@ -65,7 +70,7 @@ exports.saveBank = function(req, res) {
   if(!checkRecord.isNew()) {
     bank.save({
         id: req.params.id,
-        bankInsertedBy: req.user.id,
+        bankInsertedBy: bankInsertedBy,
         bankDescription: req.body.bankDescription,
         bankAccount: req.body.bankAccount,
         bankCurrentBalance: req.body.bankCurrentBalance,
@@ -80,7 +85,7 @@ exports.saveBank = function(req, res) {
     return;
   }
   bank.save({
-      bankInsertedBy: req.user.id,
+      bankInsertedBy: bankInsertedBy,
       bankDescription: req.body.bankDescription,
       bankAccount: req.body.bankAccount,
       bankInitialBalance: req.body.bankCurrentBalance,
