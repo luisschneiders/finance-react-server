@@ -5,7 +5,7 @@ const Vehicle = bookshelf.Model.extend({
     hasTimestamps: true,
   },{
     getAllVehicles: function(user, params) {
-      return this.where('vehicleInsertedBy', user).fetchPage({
+      return this.where('vehicleInsertedBy', user).orderBy('id', 'DESC').fetchPage({
         page: params.page <= 0 ? params.page = 1 : params.page,
         pageSize: params.pageSize <= 0 ? params.pageSize = 12 : params.pageSize
       });
