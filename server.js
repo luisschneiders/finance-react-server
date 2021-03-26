@@ -114,11 +114,11 @@ app.put('/transaction-type-id/transactionTypeInsertedBy=:transactionTypeInserted
 app.post('/transaction-type-new/transactionTypeInsertedBy=:transactionTypeInsertedBy', transactionTypeController.saveTransactionType);
 
 // // People
-// app.get('/get-all-people/page=:page&pageSize=:pageSize', peopleController.getAllPeople);
+app.get('/get-all-user-type/id=:id&page=:page&pageSize=:pageSize', peopleController.getAllPeople);
 // app.get('/get-active-people', peopleController.getActivePeople);
-// app.get('/people-id=:id', peopleController.getPeopleById);
-// app.put('/people-id=:id', userController.ensureAuthenticated, peopleController.savePeople);
-// app.post('/people-new', userController.ensureAuthenticated, peopleController.savePeople);
+app.get('/user-type-id/userTypeInsertedBy=:userTypeInsertedBy&id=:id', peopleController.getPeopleById);
+app.put('/user-type-id/userTypeInsertedBy=:userTypeInsertedBy&id=:id', peopleController.savePeople);
+app.post('/user-type-new/userTypeInsertedBy=:userTypeInsertedBy', peopleController.savePeople);
 // app.get('/get-people-by-role=:role', peopleController.getPeopleByRole);
 
 // // Transaction
