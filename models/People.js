@@ -5,7 +5,7 @@ const People = bookshelf.Model.extend({
     hasTimestamps: true,
   },{
     getAllPeople: function(user, params) {
-      return this.where('peopleInsertedBy', user).fetchPage({
+      return this.where('peopleInsertedBy', user).orderBy('id', 'DESC').fetchPage({
         page: params.page <= 0 ? params.page = 1 : params.page,
         pageSize: params.pageSize <= 0 ? params.pageSize = 12 : params.pageSize
       });

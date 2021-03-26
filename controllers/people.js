@@ -1,69 +1,77 @@
-const People = require('../models/People');
+var People = require('../models/People');
 
 /**
- * GET /get-all-people/page=:page&pageSize=:pageSize
+ * GET /get-all-user-type/page=:page&pageSize=:pageSize
  */
 exports.getAllPeople = function(req, res) {
-  let params = {
+  var id = req.params.id;
+  var params = {
     page: req.params.page,
     pageSize: req.params.pageSize
   };
-  People.getAllPeople(req.user.id, params)
-    .then(function(people) {
-      res.send(JSON.stringify({people: people, pagination: people.pagination}));
+  People.getAllPeople(id, params)
+    .then(function(usersType) {
+      res.send(JSON.stringify({usersType, pagination: usersType.pagination}));
     }).catch(function(err) {
       console.error(err);
     });
 };
 
 /**
- * GET /get-active-people
+ * GET /get-active-user-type
  */
 exports.getActivePeople = function(req, res) {
   People.getActivePeople(req.user.id)
-    .then(function(people) {
-      res.json(people);
+    .then(function(userType) {
+      res.json(userType);
     }).catch(function(err) {
       console.error(err);
     });
 };
 
 /**
- * GET /people=:id
+ * GET /user-type=:id
  */
 exports.getPeopleById = function(req, res) {
-  People.getById(req.user.id, req.params.id)
-    .then(function(people) {
-      res.json(people);
+  var userId = req.params.userTypeInsertedBy;
+  var userTypeId = req.params.id;
+
+  People.getById(userId, userTypeId)
+    .then(function(userType) {
+      res.json(userType);
     }).catch(function(err) {
       console.error(err);
     });
 };
 
 /**
- * GET /get-people-by-role/role=:role
+ * GET /get-user-type-by-role/role=:role
  */
 exports.getPeopleByRole = function(req, res) {
-  People.getByRole(req.user.id, req.params.role)
-    .then(function(people) {
-      res.json(people);
+  var userId = req.params.userTypeInsertedBy;
+  var role = req.params.role;
+
+  People.getByRole(userId, role)
+    .then(function(userType) {
+      res.json(userType);
     }).catch(function(err) {
       console.error(err);
     });
 };
 
 /**
- * SAVE /people-new
+ * SAVE /user-type-new
  * or
- * SAVE /people=:id
+ * SAVE /user-type=:id
  */
 exports.savePeople = function(req, res) {
-  let people = null;
-  let errors = null;
-  let checkRecord = 0;
+  var people = null;
+  var errors = null;
+  var checkRecord = 0;
+  var userTypeInsertedBy = req.params.userTypeInsertedBy;
 
-  req.assert('peopleDescription', 'Description cannot be blank').notEmpty();
-  req.assert('peopleType', 'Type cannot be blank').notEmpty();
+  req.assert('userTypeDescription', 'Description cannot be blank').notEmpty();
+  req.assert('userTypeOptions', 'Type cannot be blank').notEmpty();
 
   errors = req.validationErrors();
 
@@ -77,14 +85,14 @@ exports.savePeople = function(req, res) {
   if(!checkRecord.isNew()) {
     people.save({
         id: req.params.id,
-        peopleInsertedBy: req.user.id,
-        peopleDescription: req.body.peopleDescription,
-        peopleRates: req.body.peopleRates,
-        peopleType: req.body.peopleType,
-        peopleIsActive: req.body.peopleIsActive,
+        peopleInsertedBy: userTypeInsertedBy,
+        peopleDescription: req.body.userTypeDescription,
+        peopleRates: req.body.userTypeRates,
+        peopleType: req.body.userTypeOptions,
+        peopleIsActive: req.body.userTypeIsActive,
       }, { patch: true })
       .then(function(model) {
-        res.send({ people: model, msg: 'User has been updated.' });
+        res.send({ userType: model, msg: 'User has been updated.' });
       })
       .catch(function(err) {
         res.send({ msg: err });
@@ -92,14 +100,14 @@ exports.savePeople = function(req, res) {
     return;
   }
   people.save({
-      peopleInsertedBy: req.user.id,
-      peopleDescription: req.body.peopleDescription,
-      peopleRates: req.body.peopleRates,
-      peopleType: req.body.peopleType,
-      peopleIsActive: req.body.peopleIsActive,
+      peopleInsertedBy: userTypeInsertedBy,
+      peopleDescription: req.body.userTypeDescription,
+      peopleRates: req.body.userTypeRates,
+      peopleType: req.body.userTypeOptions,
+      peopleIsActive: req.body.userTypeIsActive,
     })
     .then(function(model) {
-      res.send({ people: model, msg: 'User has been added.' });
+      res.send({ userType: model, msg: 'User has been added.' });
     })
     .catch(function(err) {
       return res.status(400).send({ msg: err });
