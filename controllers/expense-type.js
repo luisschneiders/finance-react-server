@@ -21,9 +21,11 @@ exports.getAllExpensesType = function(req, res) {
  * GET /get-active-expenses-type
  */
 exports.getActiveExpensesType = function(req, res) {
-  ExpenseType.getActiveExpensesType(req.user.id)
+  var userId = req.params.expenseTypeInsertedBy;
+
+  ExpenseType.getActiveExpensesType(userId)
     .then(function(expensesType) {
-      res.json(expensesType);
+      res.send(JSON.stringify({ expensesType }));
     }).catch(function(err) {
       console.error(err);
     });

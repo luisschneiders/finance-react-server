@@ -1,6 +1,6 @@
-const bookshelf = require('../config/bookshelf');
+var bookshelf = require('../config/bookshelf');
 
-const ExpenseType = bookshelf.Model.extend({
+var ExpenseType = bookshelf.Model.extend({
     tableName: 'expense-type',
     hasTimestamps: true,
   },{
@@ -11,7 +11,7 @@ const ExpenseType = bookshelf.Model.extend({
       });
     },
     getActiveExpensesType: function(user) {
-      return this.where({'expenseTypeInsertedBy': user, 'expenseTypeIsActive': 1}).fetchAll();
+      return this.where({'expenseTypeInsertedBy': user, 'expenseTypeIsActive': 1}).orderBy('expenseTypeDescription', 'ASC').fetchAll();
     },
     getById: function(user, expenseType) {
       return this.where({'expenseTypeInsertedBy': user, 'id': expenseType}).fetch();
