@@ -21,9 +21,11 @@ exports.getAllTransactionsType = function(req, res) {
  * GET /get-active-transactions-type
  */
 exports.getActiveTransactionsType = function(req, res) {
-  TransactionType.getActiveTransactionsType(req.user.id)
+  var userId = req.params.transactionTypeInsertedBy;
+
+  TransactionType.getActiveTransactionsType(userId)
     .then(function(transactionsType) {
-      res.json(transactionsType);
+      res.send(JSON.stringify({ transactionsType }));
     }).catch(function(err) {
       console.error(err);
     });

@@ -108,7 +108,7 @@ app.post('/expense-type-new/expenseTypeInsertedBy=:expenseTypeInsertedBy', expen
 
 // // Transaction Type
 app.get('/get-all-transactions-type/id=:id&page=:page&pageSize=:pageSize', transactionTypeController.getAllTransactionsType);
-// app.get('/get-active-transactions-type', transactionTypeController.getActiveTransactionsType);
+app.get('/get-active-transactions-type/transactionTypeInsertedBy=:transactionTypeInsertedBy', transactionTypeController.getActiveTransactionsType);
 app.get('/transaction-type-id/transactionTypeInsertedBy=:transactionTypeInsertedBy&id=:id', transactionTypeController.getTransactionTypeById);
 app.put('/transaction-type-id/transactionTypeInsertedBy=:transactionTypeInsertedBy&id=:id', transactionTypeController.saveTransactionType);
 app.post('/transaction-type-new/transactionTypeInsertedBy=:transactionTypeInsertedBy', transactionTypeController.saveTransactionType);

@@ -1,6 +1,6 @@
-const bookshelf = require('../config/bookshelf');
+var bookshelf = require('../config/bookshelf');
 
-const TransactionType = bookshelf.Model.extend({
+var TransactionType = bookshelf.Model.extend({
     tableName: 'transaction-type',
     hasTimestamps: true,
   },{
@@ -11,7 +11,7 @@ const TransactionType = bookshelf.Model.extend({
       });
     },
     getActiveTransactionsType: function(user) {
-      return this.where({'transactionTypeInsertedBy': user, 'transactionTypeIsActive': 1}).fetchAll();
+      return this.where({'transactionTypeInsertedBy': user, 'transactionTypeIsActive': 1}).orderBy('transactionTypeDescription', 'ASC').fetchAll();
     },
     getById: function(user, transactionType) {
       return this.where({'transactionTypeInsertedBy': user, 'id': transactionType}).fetch();
