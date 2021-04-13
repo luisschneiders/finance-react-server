@@ -11,7 +11,7 @@ const Bank = bookshelf.Model.extend({
       });
     },
     getActiveBanks: function(user) {
-      return this.where({'bankInsertedBy': user, 'bankIsActive': 1}).fetchAll();
+      return this.where({'bankInsertedBy': user, 'bankIsActive': 1}).orderBy('bankDescription', 'ASC').fetchAll();
     },
     getById: function(user, bank) {
       return this.where({'bankInsertedBy': user, 'id': bank}).fetch();

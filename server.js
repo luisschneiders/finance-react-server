@@ -94,7 +94,7 @@ app.get('/main-by-year/id=:id&year=:year', mainController.getTransactionsAndPurc
 
 // // Banks
 app.get('/get-all-banks/id=:id&page=:page&pageSize=:pageSize', bankController.getAllBanks);
-// app.get('/get-active-banks', bankController.getActiveBanks);
+app.get('/get-active-banks/bankInsertedBy=:bankInsertedBy', bankController.getActiveBanks);
 app.get('/bank-id/bankInsertedBy=:bankInsertedBy&id=:id', bankController.getBankById);
 app.put('/bank-id/bankInsertedBy=:bankInsertedBy&id=:id', bankController.saveBank);
 app.post('/bank-new/bankInsertedBy=:bankInsertedBy', bankController.saveBank);

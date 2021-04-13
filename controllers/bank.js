@@ -21,9 +21,11 @@ exports.getAllBanks = function(req, res) {
  * GET /get-active-banks
  */
 exports.getActiveBanks = function(req, res) {
-  Bank.getActiveBanks(req.user.id)
+  var userId = req.params.bankInsertedBy;
+
+  Bank.getActiveBanks(userId)
     .then(function(banks) {
-      res.json(banks);
+      res.send(JSON.stringify({ banks }));
     }).catch(function(err) {
       console.error(err);
     });
